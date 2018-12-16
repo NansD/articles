@@ -1,0 +1,31 @@
+{
+  "name": "serverless-store",
+  "version": "1.0.0",
+  "description": "",
+  "dependencies": {
+    "base-64": "^0.1.0",
+    "mongo-sanitize": "^1.0.0",
+    "mongoose-unique-validator": "^2.0.1",
+    "serverless": "^1.32.0"
+  },
+  "devDependencies": {
+    "cryptiles": "^4.1.2",
+    "mongoose": "^5.4.0",
+    "qs": "^6.5.2",
+    "serverless-offline": "^3.25.11"
+  },
+  "scripts": {
+    "start": "serverless offline start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NansD/serverless-store.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NansD/serverless-store/issues"
+  },
+  "homepage": "https://github.com/NansD/serverless-store#readme"
+}

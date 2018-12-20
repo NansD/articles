@@ -1,4 +1,29 @@
-/node_modules
-.DS_Store
-.idea
-package-lock.json
+/server/node_modules
+/server/.DS_Store
+/server/.idea
+/server/package-lock.json
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/react-articles/node_modules
+/react-articles/.pnp
+/react-articles/.pnp.js
+
+# testing
+/react-articles/coverage
+
+# production
+/react-articles/build
+
+# misc
+/react-articles/.DS_Store
+/react-articles/.env.local
+/react-articles/.env.development.local
+/react-articles/.env.test.local
+/react-articles/.env.production.local
+
+/react-articles/npm-debug.log*
+/react-articles/yarn-debug.log*
+/react-articles/yarn-error.log*
+/react-articles/package-lock.json

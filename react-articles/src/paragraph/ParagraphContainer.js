@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Paragraph from "./Paragraph";
+import axios from "axios";
 
 class ParagraphContainer extends Component {
     constructor(props) {
@@ -12,6 +13,14 @@ class ParagraphContainer extends Component {
                 paragraphContent: '',
             },
         }
+    }
+
+    componentDidMount() {
+        axios.get('http://localhost:3000/article/' + this.props.articleid).then(res => {
+            this.setState({
+                paragraphs: res.data.article.paragraphs
+            });
+        });
     }
 
     addParagraph = () => {
@@ -55,7 +64,7 @@ class ParagraphContainer extends Component {
                     <h2 className="title">{this.props.articleid} <i className="snes-logo"/></h2>
                     <div className="containers">
                         {
-                            this.state.paragraphs.map((paragraph) => (<Paragraph key={paragraph.id} content={paragraph.text}/>))
+                            this.state.paragraphs.map((paragraph) => (<Paragraph key={paragraph.id} content={paragraph.content}/>))
                         }
                     </div>
                 </section>

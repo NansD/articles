@@ -5,7 +5,7 @@ const ArticleList = (props) => {
 
     if (props.results) {
         options = props.results.map(article => (
-            <div key={article.id}><button className="btn" id={article.id} onClick={props.showParagraph}>{article.name}</button><i className="icon close"/></div>
+            <div key={article._id}><button className="btn" id={article._id} onClick={props.showParagraph}>{article.title}</button><i className="icon close"/></div>
         ))
     }
     return <div>{options}</div>

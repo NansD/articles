@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import ArticleList from './ArticleList';
+import axios from 'axios';
 import ParagraphContainer from "../paragraph/ParagraphContainer";
 
 class ArticleManager extends Component {
     constructor() {
         super();
         this.state = {
-            results: [
-                {id: 3, name:"NansLUnique"},
-                {id:4, name:"ValentinLExpert"}
-            ],
+            results: [],
             articleToDisplay: '',
         }
     }
@@ -18,6 +16,15 @@ class ArticleManager extends Component {
         this.setState({
             articleToDisplay: e.target.id,
         })
+    }
+
+    componentDidMount() {
+        axios.get('http://localhost:3000/article').then(res => {
+            console.log(res.data.articles);
+            this.setState({
+                results:res.data.articles
+            })
+        });
     }
 
     render() {

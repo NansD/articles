@@ -9,6 +9,7 @@ class ParagraphContainer extends Component {
         this.state = {
             paragraphs: [],
             id: 0,
+            name: '',
             change: {
                 paragraphContent: '',
             },
@@ -18,6 +19,7 @@ class ParagraphContainer extends Component {
     componentDidMount() {
         axios.get('http://localhost:3000/article/' + this.props.articleid).then(res => {
             this.setState({
+                name: res.data.article.title,
                 paragraphs: res.data.article.paragraphs
             });
         });
@@ -61,7 +63,7 @@ class ParagraphContainer extends Component {
                     </div>
                 </div>
                 <section className="container with-title">
-                    <h2 className="title">{this.props.articleid} <i className="snes-logo"/></h2>
+                    <h2 className="title">{this.state.name} <i className="snes-logo"/></h2>
                     <div className="containers">
                         {
                             this.state.paragraphs.map((paragraph) => (<Paragraph key={paragraph.id} content={paragraph.content}/>))

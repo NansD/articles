@@ -7,7 +7,7 @@ module.exports.create = async (event, context) => {
   let statusCode = 200;
   let message = 'paragraph create endpoint called, paragraph successfully created';
   const formData = sanitize(queryString.parse(event.body));
-
+  console.log(formData);
   const paragraph = await Paragraph.create(formData);
 
   return {

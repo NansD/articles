@@ -8,7 +8,6 @@ module.exports.create = async (event, context) => {
   const statusCode = 200;
   const message = 'article create endpoint called, article successfully created';
   const formData = sanitize(queryString.parse(event.body));
-  console.log(formData);
   const article = await Article.create(formData);
 
   return {

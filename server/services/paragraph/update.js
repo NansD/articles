@@ -11,6 +11,7 @@ module.exports.update = async (event, context) => {
   const _id = (event.pathParameters && event.pathParameters.hasOwnProperty('_id'))
     ? sanitize(event.pathParameters._id)
     : false;
+  console.log(formData._id);
   if (_id && _id === formData._id) {
     // Lorsqu'on update le paragraphe, il a un nouvel ordre
     // Il peut s'agir d'un numéro d'ordre qui est déjà utilisé

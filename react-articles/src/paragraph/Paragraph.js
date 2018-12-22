@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import {SortableElement} from 'react-sortable-hoc';
 
-class Paragraph extends Component {
+const Paragraph = SortableElement((props) => {
 
-    constructor(props) {
+    /*constructor(props) {
         super(props);
         this.state = {
             beforeOnClick: '',
@@ -68,18 +69,16 @@ class Paragraph extends Component {
         this.setState({
             isToDisplay: !this.state.isToDisplay,
         })
-    };
+    };*/
 
-    render() {
-        if (this.state.isToDisplay) {
-            if (this.state.isModified)
-                return(<textarea autoFocus={true} className="container" name="content" value={this.state.change.content}
-                                 onChange={this.handleChange.bind(this)} onKeyDown={this.handleKeyDown.bind(this)} onBlur={this.handleBlur.bind(this)}/>);
-            else {
-                return(<div className="container with-title"><i className="icon close" onClick={this.delParagraph.bind(this)}/><p onClick={this.takeOnClickValue.bind(this)}>{this.state.change.content}</p></div>)
-            }
-        } else return null;
-    }
-}
+    /*if (this.state.isToDisplay) {
+        if (this.state.isModified)
+            return(<textarea autoFocus={true} className="container" name="content" value={this.state.change.content}
+                             onChange={this.handleChange.bind(this)} onKeyDown={this.handleKeyDown.bind(this)} onBlur={this.handleBlur.bind(this)}/>);*/
+        //else {
+            return(<div className="container with-title handle" id={props.name}><i className="icon close"/><p>{props.content}</p></div>)
+        //}
+    //} else return null;
+});
 
 export default Paragraph;

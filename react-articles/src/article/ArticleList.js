@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import Article from "./Article";
 
 const ArticleList = (props) => {
     var options = [];
 
     if (props.results) {
         options = props.results.map(article => (
-            <div key={article._id}><button className="btn" id={article._id} onClick={props.showParagraph}>{article.title}</button><i className="icon close"/></div>
+            <Article key={article._id} id={article._id} title={article.title} showParagraph={props.showParagraph} delParagraph={props.delParagraph}/>
         ))
     }
     return <div>{options}</div>

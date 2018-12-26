@@ -1,0 +1,24 @@
+{
+  "name": "articles",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently --kill-others \"cd server && npm start\" \"cd react-articles && npm start\"",
+    "install": "concurrently \"cd server && npm install\" \"cd react-articles && npm install\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NansD/serverless-articles.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NansD/serverless-articles/issues"
+  },
+  "homepage": "https://github.com/NansD/serverless-articles#readme",
+  "dependencies": {
+    "concurrently": "^4.1.0"
+  }
+}

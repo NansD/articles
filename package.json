@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "concurrently --kill-others \"cd server && npm start\" \"cd react-articles && npm start\"",
+    "install": "concurrently \"cd server && npm install\" \"cd react-articles && npm install\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

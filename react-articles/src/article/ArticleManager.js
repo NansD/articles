@@ -11,6 +11,7 @@ class ArticleManager extends Component {
             articleToDisplay: '',
             inputClasses: 'input',
             inputIsError: false,
+            newArticle: false,
             change: {
                 articleName : ''
             }
@@ -31,7 +32,7 @@ class ArticleManager extends Component {
         });
     }
 
-    addParagraph = () => {
+    addArticle = () => {
         const title = this.state.change.articleName.trim();
         if(title) {
             axios.post('http://localhost:3000/article',"title="+title).then((res) => {
@@ -39,11 +40,13 @@ class ArticleManager extends Component {
                     inputClasses: 'input',
                     inputIsError: false,
                     results: [...prevState.results, {
-                        _id: res.data.id,
+                        _id: res.data.article._id,
                         title: title
-                    }]
-                }))
-            })
+                    }],
+                    newArticle: true,
+                    articleToDisplay: res.data.article._id
+                }));
+            });
         } else {this.setState({
             inputClasses: 'input is-error',
             inputIsError: true,
@@ -71,12 +74,13 @@ class ArticleManager extends Component {
     };
 
     render() {
-        const article = this.state.articleToDisplay ? <ParagraphContainer articleid={this.state.articleToDisplay}/> : null;
+        const article = this.state.articleToDisplay ? <ParagraphContainer articleid={this.state.articleToDisplay}
+                                                                          newArticle={this.state.newArticle}/> : null;
         return (
             <div className="">
                 <div className="container">
                     <div>
-                        <button className="btn is-success" onClick={this.addParagraph}>Ajouter un article</button>
+                        <button className="btn is-success" onClick={this.addArticle}>Ajouter un article</button>
                         <input type="text" className={this.state.inputClasses} name="articleName" value={this.state.change.articleName} onChange={this.handleChange.bind(this)}/>
                         {this.state.inputIsError && <div>Veuillez donner un nom à votre article.</div>}
                     </div>

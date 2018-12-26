@@ -14,14 +14,14 @@ const ParagraphList = SortableContainer((props) => {
                                                                                             handleChange={props.handleChange}
                                                                                             para={paragraph._id}
                                                                                             handleKeyDown={props.handleKeyDown}/> :
-                                                                        <Paragraph key={paragraph._id}
-                                                                                   name={index}
-                                                                                   index={index}
-                                                                                   content={paragraph.content}
-                                                                                   handleChange={props.handleChange}
-                                                                                   editParagraph={props.editParagraph}
-                                                                                   para={paragraph._id}
-                                                                                   delParagraph={props.delParagraph} />))
+                                                                         <Paragraph key={paragraph._id}
+                                                                                    name={index}
+                                                                                    index={index}
+                                                                                    content={paragraph.content}
+                                                                                    handleChange={props.handleChange}
+                                                                                    editParagraph={props.editParagraph}
+                                                                                    para={paragraph._id}
+                                                                                    delParagraph={props.delParagraph} />))
             }
         </div>
     )

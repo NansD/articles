@@ -19,11 +19,26 @@ class ParagraphContainer extends Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.newArticle) {
+            this.setState({
+                editionMode: true
+            })
+        };
+        this.updateFrontParagraph();
+    }
+
     componentDidMount() {
+        if(this.props.newArticle) {
+            this.setState({
+                editionMode: true
+            })
+        };
         this.updateFrontParagraph();
     }
 
     updateFrontParagraph = () => {
+        console.log("ceci est un test")
         axios.get('http://localhost:3000/article/' + this.props.articleid).then(res => {
             let paragraphs = res.data.article.paragraphs;
 

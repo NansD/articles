@@ -12,7 +12,7 @@ class ParagraphContainer extends Component {
             paragraphs: [],
             id: 0,
             name: '',
-            orderMax:0,
+            editionMode: false,
             change: {
                 paragraphContent: '',
             },
@@ -20,50 +20,36 @@ class ParagraphContainer extends Component {
     }
 
     componentDidMount() {
+        this.updateFrontParagraph();
+    }
+
+    updateFrontParagraph = () => {
         axios.get('http://localhost:3000/article/' + this.props.articleid).then(res => {
             let paragraphs = res.data.article.paragraphs;
-            let paragraphToCards = [];
-            let counter = 0;
 
             paragraphs.sort(function (a, b) {
                 return a.order - b.order;
             });
 
-            console.log(paragraphs);
+            paragraphs.map((paragraph,index) => {
+                paragraphs[index].toEdit = false
+            });
 
             this.setState({
                 name: res.data.article.title,
                 paragraphs: paragraphs,
             });
-        });
-    }
 
-    maxParagraph = () => {
-        this.state.paragraphs.forEach((paragraph) => {
-            if(this.state.orderMax <= paragraph.order) {
-                this.setState({
-                    orderMax: paragraph.order
-                })
-            }
-        })
+            console.log(this.state.paragraphs);
+        });
     };
 
     addParagraph = () => {
-        this.maxParagraph();
-        const order = this.state.orderMax + 1;
-        axios.post('http://localhost:3000/paragraph',"articleId=" + this.props.articleid + "&order=" + order + "&content=" + this.state.change.paragraphContent)
-        /*this.setState(state => {
-            let id = this.state.id + 1;
-            const paragraphs = [...state.paragraphs, {id:id, text: this.state.change.paragraphContent}];
-
-            return {
-                paragraphs,
-                id: id,
-                change: {
-                    paragraphContent: '',
-                },
-            };
-        });*/
+        const order = this.state.paragraphs.length + 1;
+        const content = this.state.change.paragraphContent ? this.state.change.paragraphContent : "Nouveau Paragraphe";
+        axios.post('http://localhost:3000/paragraph',"articleId=" + this.props.articleid + "&order=" + order + "&content=" + content).then(
+            this.updateFrontParagraph()
+        )
     };
 
 
@@ -77,6 +63,28 @@ class ParagraphContainer extends Component {
         });
     };
 
+    handleChangeParagraph = (e) => {
+        let paragraphs = [...this.state.paragraphs];
+        paragraphs[e.target.name] = e.target.value;
+        this.setState({paragraphs});
+    };
+
+    editParagraph = (e) => {
+        if (this.state.editionMode) {
+            let paragraphs = [...this.state.paragraphs];
+            paragraphs[e.target.dataset.id].toEdit = true;
+            this.setState({paragraphs});
+        }
+    };
+
+    delParagraph = (e) => {
+        console.log(e.target);
+        const id = e.target.dataset.id;
+        axios.delete("http://localhost:3000/paragraph/" + id).then(
+            this.updateFrontParagraph()
+        )
+    };
+
     onSortEnd = ({oldIndex, newIndex, collection}, e) => {
         const id = this.state.paragraphs[oldIndex]._id;
         axios.patch("http://localhost:3000/paragraph/" + id,"_id=" + id + "&order=" + newIndex).then(
@@ -86,20 +94,27 @@ class ParagraphContainer extends Component {
         );
     };
 
+    toggleEditionMode = () => {
+        const newEditionMode = !this.state.editionMode;
+        this.setState({
+            editionMode : newEditionMode,
+        })
+    };
 
 
     render() {
         return(
             <div className="">
-                <div className="container">
+                <button className="btn is-warning" onClick={this.toggleEditionMode}>{this.state.editionMode ? "Consulter les paragraphes" : "Editer les paragraphes"}</button>
+                {this.state.editionMode && <div className="container">
                     <div>
                         <button className="btn is-success" onClick={this.addParagraph}>Ajouter un paragraphe</button>
                         <input type="text" className="input" name="paragraphContent" value={this.state.change.paragraphContent} onChange={this.handleChange.bind(this)}/>
                     </div>
-                </div>
+                </div>}
                 <section className="container with-title">
                     <h2 className="title">{this.state.name} <i className="snes-logo"/></h2>
-                    <ParagraphList items={this.state.paragraphs} onSortEnd={this.onSortEnd}/>
+                    <ParagraphList distance={2} items={this.state.paragraphs} onSortEnd={this.onSortEnd} handleChange={this.handleChangeParagraph} editParagraph={this.editParagraph} delParagraph={this.delParagraph}/>
                 </section>
             </div>
         )

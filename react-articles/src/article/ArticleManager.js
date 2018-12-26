@@ -51,7 +51,7 @@ class ArticleManager extends Component {
         })}
     };
 
-    delParagraph = (e) => {
+    delArticle = (e) => {
         axios.delete('http://localhost:3000/article/' + e.target.id).then(res => {
             axios.get('http://localhost:3000/article').then(res => {
                 this.setState({
@@ -84,7 +84,7 @@ class ArticleManager extends Component {
                 </div>
                 <section className="container with-title">
                     <h2 className="title">Liste des Articles <i className="nes-logo"/></h2>
-                    <ArticleList results={this.state.results} showParagraph={this.showParagraph.bind(this)} delParagraph={this.delParagraph}/>
+                    <ArticleList results={this.state.results} showParagraph={this.showParagraph.bind(this)} delArticle={this.delArticle}/>
                 </section>
                 {article}
             </div>

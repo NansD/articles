@@ -7,7 +7,7 @@ const Article = (props) => {
                     onClick={props.showParagraph}>
                         {props.title}
             </button>
-            <i onClick={props.delParagraph}
+            <i onClick={props.delArticle}
                id={props.id}
                className="icon close"/>
            </div>)

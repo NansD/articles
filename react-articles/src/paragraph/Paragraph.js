@@ -3,27 +3,7 @@ import {SortableElement} from 'react-sortable-hoc';
 
 const Paragraph = SortableElement((props) => {
 
-    /*constructor(props) {
-        super(props);
-        this.state = {
-            beforeOnClick: '',
-            isModified: true,
-            isToDisplay: true,
-            change: {
-                content: ''
-            },
-        }
-    }
-
-    componentDidMount() {
-        let content = this.props.content.length > 0 ? this.props.content : "Nouveau Paragraphe";
-        this.setState({
-            change: {
-                content: content,
-            },
-        })
-    }
-
+    /*
     handleChange(e) {
         this.setState({
             change : {
@@ -71,14 +51,7 @@ const Paragraph = SortableElement((props) => {
         })
     };*/
 
-    /*if (this.state.isToDisplay) {
-        if (this.state.isModified)
-            return(<textarea autoFocus={true} className="container" name="content" value={this.state.change.content}
-                             onChange={this.handleChange.bind(this)} onKeyDown={this.handleKeyDown.bind(this)} onBlur={this.handleBlur.bind(this)}/>);*/
-        //else {
-            return(<div className="container with-title handle" id={props.name}><i className="icon close"/><p>{props.content}</p></div>)
-        //}
-    //} else return null;
+            return(<div className="container handle"><i className="icon close" onClick={props.delParagraph} data-id={props.para}/><div onClick={props.editParagraph} data-id={props.name}>{props.content}</div></div>)
 });
 
 export default Paragraph;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ParagraphList from './ParagraphList';
 import axios from "axios";
-import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
+import {arrayMove} from 'react-sortable-hoc';
 
 
 class ParagraphContainer extends Component {
@@ -32,15 +32,14 @@ class ParagraphContainer extends Component {
             });
 
             paragraphs.map((paragraph,index) => {
-                paragraphs[index].toEdit = false
+                paragraphs[index].toEdit = false;
+                paragraphs[index].previousContent = paragraph.content;
             });
 
             this.setState({
                 name: res.data.article.title,
                 paragraphs: paragraphs,
             });
-
-            console.log(this.state.paragraphs);
         });
     };
 
@@ -63,10 +62,11 @@ class ParagraphContainer extends Component {
         });
     };
 
-    handleChangeParagraph = (e) => {
-        let paragraphs = [...this.state.paragraphs];
-        paragraphs[e.target.name] = e.target.value;
-        this.setState({paragraphs});
+    toggleEditionMode = () => {
+        const newEditionMode = !this.state.editionMode;
+        this.setState({
+            editionMode : newEditionMode,
+        })
     };
 
     editParagraph = (e) => {
@@ -77,12 +77,36 @@ class ParagraphContainer extends Component {
         }
     };
 
+    handleChangeParagraph = (e) => {
+        let paragraphs = [...this.state.paragraphs];
+        paragraphs[e.target.name].content = e.target.value;
+        this.setState({paragraphs});
+    };
+
     delParagraph = (e) => {
-        console.log(e.target);
         const id = e.target.dataset.id;
         axios.delete("http://localhost:3000/paragraph/" + id).then(
             this.updateFrontParagraph()
         )
+    };
+
+    handleKeyDown = (e) => {
+        if (e.keyCode === 27) {
+            let paragraphs = [...this.state.paragraphs];
+            paragraphs[e.target.name].toEdit = false;
+            paragraphs[e.target.name].content = paragraphs[e.target.name].previousContent;
+            this.setState({paragraphs});
+        }
+        if (e.keyCode === 13) {
+            const id = e.target.dataset.id;
+            let paragraphs = [...this.state.paragraphs];
+            axios.patch("http://localhost:3000/paragraph/" + id,"_id=" + id + "&content=" + paragraphs[e.target.name].content).then(
+                paragraphs[e.target.name].toEdit = false
+            );
+            paragraphs[e.target.name].previousContent = paragraphs[e.target.name].content;
+            this.setState({paragraphs});
+            e.target.blur();
+        }
     };
 
     onSortEnd = ({oldIndex, newIndex, collection}, e) => {
@@ -92,13 +116,6 @@ class ParagraphContainer extends Component {
                 paragraphs: arrayMove(this.state.paragraphs, oldIndex, newIndex),
             })
         );
-    };
-
-    toggleEditionMode = () => {
-        const newEditionMode = !this.state.editionMode;
-        this.setState({
-            editionMode : newEditionMode,
-        })
     };
 
 
@@ -114,7 +131,13 @@ class ParagraphContainer extends Component {
                 </div>}
                 <section className="container with-title">
                     <h2 className="title">{this.state.name} <i className="snes-logo"/></h2>
-                    <ParagraphList distance={2} items={this.state.paragraphs} onSortEnd={this.onSortEnd} handleChange={this.handleChangeParagraph} editParagraph={this.editParagraph} delParagraph={this.delParagraph}/>
+                    <ParagraphList distance={2}
+                                   items={this.state.paragraphs}
+                                   onSortEnd={this.onSortEnd}
+                                   handleChange={this.handleChangeParagraph}
+                                   editParagraph={this.editParagraph}
+                                   delParagraph={this.delParagraph}
+                                   handleKeyDown={this.handleKeyDown}/>
                 </section>
             </div>
         )

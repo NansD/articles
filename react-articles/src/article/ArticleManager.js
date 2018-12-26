@@ -25,7 +25,6 @@ class ArticleManager extends Component {
 
     componentDidMount() {
         axios.get('http://localhost:3000/article').then(res => {
-            console.log(res.data.articles);
             this.setState({
                 results:res.data.articles
             })

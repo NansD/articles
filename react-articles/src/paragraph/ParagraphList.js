@@ -7,15 +7,14 @@ const ParagraphList = SortableContainer((props) => {
     return (
         <div className="container">
             {
-                props.items.map((paragraph,index) => (paragraph.toEdit ? <EditableParagraph key={paragraph.id}
+                props.items.map((paragraph,index) => (paragraph.toEdit ? <EditableParagraph key={paragraph._id}
                                                                                             name={index}
                                                                                             index={index}
                                                                                             content={paragraph.content}
                                                                                             handleChange={props.handleChange}
-                                                                                            editParagraph={props.editParagraph}
-                                                                                            idParagraph={paragraph._id}
-                                                                                            delParagraph={props.delParagraph} /> :
-                                                                        <Paragraph key={paragraph.id}
+                                                                                            para={paragraph._id}
+                                                                                            handleKeyDown={props.handleKeyDown}/> :
+                                                                        <Paragraph key={paragraph._id}
                                                                                    name={index}
                                                                                    index={index}
                                                                                    content={paragraph.content}

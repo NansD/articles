@@ -25,7 +25,9 @@ class ParagraphContainer extends Component {
                 editionMode: true
             })
         };
-        this.updateFrontParagraph();
+        // update the displayed paragraphs according to the
+        // article that will be displayed
+        this.updateFrontParagraph(nextProps.articleid);
     }
 
     componentDidMount() {
@@ -37,9 +39,9 @@ class ParagraphContainer extends Component {
         this.updateFrontParagraph();
     }
 
-    updateFrontParagraph = () => {
-        console.log("ceci est un test")
-        axios.get('http://localhost:3000/article/' + this.props.articleid).then(res => {
+    updateFrontParagraph = (articleId) => {
+        const articleIdToQuery = articleId || this.props.articleid
+        axios.get('http://localhost:3000/article/' + articleIdToQuery).then(res => {
             let paragraphs = res.data.article.paragraphs;
 
             paragraphs.sort(function (a, b) {

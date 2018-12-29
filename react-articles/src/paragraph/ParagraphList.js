@@ -6,6 +6,7 @@ import {SortableContainer} from 'react-sortable-hoc';
 const ParagraphList = SortableContainer((props) => {
     return (
         <div className="container">
+            {/*index prop is used for react-sortable-hoc library, but not used in pargraph/editableparagraph component*/}
             {
                 props.items.map((paragraph,index) => (paragraph.toEdit ? <EditableParagraph key={paragraph._id}
                                                                                             name={index}
@@ -18,7 +19,6 @@ const ParagraphList = SortableContainer((props) => {
                                                                                     name={index}
                                                                                     index={index}
                                                                                     content={paragraph.content}
-                                                                                    handleChange={props.handleChange}
                                                                                     editParagraph={props.editParagraph}
                                                                                     para={paragraph._id}
                                                                                     delParagraph={props.delParagraph} />))

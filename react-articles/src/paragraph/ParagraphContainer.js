@@ -5,6 +5,7 @@ import {arrayMove} from 'react-sortable-hoc';
 
 
 class ParagraphContainer extends Component {
+    //initialization of component's state
     constructor(props) {
         super(props);
 
@@ -19,17 +20,7 @@ class ParagraphContainer extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.newArticle) {
-            this.setState({
-                editionMode: true
-            })
-        };
-        // update the displayed paragraphs according to the
-        // article that will be displayed
-        this.updateFrontParagraph(nextProps.articleid);
-    }
-
+    //display the article on the first click using props
     componentDidMount() {
         if(this.props.newArticle) {
             this.setState({
@@ -39,6 +30,18 @@ class ParagraphContainer extends Component {
         this.updateFrontParagraph();
     }
 
+    // update the displayed paragraphs according to the
+    // article that will be displayed
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.newArticle) {
+            this.setState({
+                editionMode: true
+            })
+        };
+        this.updateFrontParagraph(nextProps.articleid);
+    }
+
+    //Method displaying the paragraphs of an article
     updateFrontParagraph = (articleId) => {
         const articleIdToQuery = articleId || this.props.articleid
         axios.get('http://localhost:3000/article/' + articleIdToQuery).then(res => {
@@ -60,6 +63,9 @@ class ParagraphContainer extends Component {
         });
     };
 
+    //Add a paragraph to the article
+    //Add the paragraph to the dtabase using Post request
+    //Using paragraphs.length as the order to boost performance
     addParagraph = () => {
         const order = this.state.paragraphs.length + 1;
         const content = this.state.change.paragraphContent ? this.state.change.paragraphContent : "Nouveau Paragraphe";
@@ -69,7 +75,7 @@ class ParagraphContainer extends Component {
     };
 
 
-    //Gérer les les changements d'input
+    //Handle inputs change for every inputs in the page
     handleChange(e) {
         this.setState({
             change : {
@@ -79,6 +85,7 @@ class ParagraphContainer extends Component {
         });
     };
 
+    //Toggle if the user can edit the paragraphs or not
     toggleEditionMode = () => {
         const newEditionMode = !this.state.editionMode;
         this.setState({
@@ -86,6 +93,7 @@ class ParagraphContainer extends Component {
         })
     };
 
+    //Passing toEdit value to true will display a textarea instead of div (permitting edition)
     editParagraph = (e) => {
         if (this.state.editionMode) {
             let paragraphs = [...this.state.paragraphs];
@@ -94,12 +102,14 @@ class ParagraphContainer extends Component {
         }
     };
 
+    //Handle the edition of a paragraph during tapping
     handleChangeParagraph = (e) => {
         let paragraphs = [...this.state.paragraphs];
         paragraphs[e.target.name].content = e.target.value;
         this.setState({paragraphs});
     };
 
+    //Deletes a pargraph in the database and in the state
     delParagraph = (e) => {
         const id = e.target.dataset.id;
         axios.delete("http://localhost:3000/paragraph/" + id).then(
@@ -107,6 +117,8 @@ class ParagraphContainer extends Component {
         )
     };
 
+    //Handle key down in the textarea durinf edition of a paragraph
+    //27 = ESC key -- 13 = Ebter key
     handleKeyDown = (e) => {
         if (e.keyCode === 27) {
             let paragraphs = [...this.state.paragraphs];
@@ -126,20 +138,26 @@ class ParagraphContainer extends Component {
         }
     };
 
+    //Handle end of sorting (given by the react-sortable-hoc library)
+    //Editing the paragraphs' orders in the database
+    //To simulate the same behavior of the library in the back-end, we used forEach method --> Editing all the orders in the db
     onSortEnd = ({oldIndex, newIndex, collection}, e) => {
-        const id = this.state.paragraphs[oldIndex]._id;
-        axios.patch("http://localhost:3000/paragraph/" + id,"_id=" + id + "&order=" + newIndex).then(
-            this.setState({
-                paragraphs: arrayMove(this.state.paragraphs, oldIndex, newIndex),
-            })
-        );
+        this.setState({
+            paragraphs: arrayMove(this.state.paragraphs, oldIndex, newIndex)
+        });
+        let id;
+        this.state.paragraphs.forEach(function (paragraph, index) {
+            id = paragraph._id;
+            axios.patch("http://localhost:3000/paragraph/" + id,"_id=" + id + "&order=" + index);
+        })
     };
 
 
+    //Rendering the paragraph container component
     render() {
         return(
-            <div className="">
-                <button className="btn is-warning" onClick={this.toggleEditionMode}>{this.state.editionMode ? "Consulter les paragraphes" : "Editer les paragraphes"}</button>
+            <div>
+                <button className="btn is-warning" onClick={this.toggleEditionMode}>{this.state.editionMode ? "Désactiver l'édition des paragraphes" : "Activer l'édition des paragraphes"}</button>
                 {this.state.editionMode && <div className="container">
                     <div>
                         <button className="btn is-success" onClick={this.addParagraph}>Ajouter un paragraphe</button>
@@ -148,6 +166,7 @@ class ParagraphContainer extends Component {
                 </div>}
                 <section className="container with-title">
                     <h2 className="title">{this.state.name} <i className="snes-logo"/></h2>
+                    {/*distance is used for avoiding the mixing of onClick to start edition and the click for sorting elements*/}
                     <ParagraphList distance={2}
                                    items={this.state.paragraphs}
                                    onSortEnd={this.onSortEnd}

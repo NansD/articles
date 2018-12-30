@@ -140,16 +140,23 @@ class ParagraphContainer extends Component {
 
     //Handle end of sorting (given by the react-sortable-hoc library)
     //Editing the paragraphs' orders in the database
-    //To simulate the same behavior of the library in the back-end, we used forEach method --> Editing all the orders in the db
     onSortEnd = ({oldIndex, newIndex, collection}, e) => {
         this.setState({
             paragraphs: arrayMove(this.state.paragraphs, oldIndex, newIndex)
-        });
-        let id;
-        this.state.paragraphs.forEach(function (paragraph, index) {
-            id = paragraph._id;
-            axios.patch("http://localhost:3000/paragraph/" + id,"_id=" + id + "&order=" + index);
-        })
+        }, () => {
+            // If we keep the RESTful approach for the backend, we have to do this :
+            // let id;
+            // this.state.paragraphs.forEach(function (paragraph, index) {
+            //     id = paragraph._id;
+            //     axios.patch("http://localhost:3000/paragraph/" + id,"_id=" + id + "&order=" + index);
+            // })
+            //
+            // but instead we have decided to create a route to allow to update
+            // several paragraphs at a time :
+            axios.patch('http://localhost:3000/paragraphs', "paragraphs="+JSON.stringify(this.state.paragraphs));
+        });        
+        
+        
     };
 
 

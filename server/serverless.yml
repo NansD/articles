@@ -102,6 +102,12 @@ functions:
           parameters:
             paths:
               id: true
+  paragraphsPATCH:
+    handler: services/paragraphs/update.update
+    events:
+    - http:
+        path: paragraphs
+        method: PATCH
   articlePOST:
     handler: services/article/create.create
     events:

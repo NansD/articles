@@ -7,6 +7,7 @@ const ParagraphList = SortableContainer((props) => {
     return (
         <div className="container">
             {/*index prop is used for react-sortable-hoc library, but not used in pargraph/editableparagraph component*/}
+            {/*Two components: Editable and Paragraph to display the edition mode only on the paragraphs clicked*/}
             {
                 props.items.map((paragraph,index) => (paragraph.toEdit ? <EditableParagraph key={paragraph._id}
                                                                                             name={index}

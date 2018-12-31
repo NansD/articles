@@ -5,7 +5,6 @@ const Article = require('../../models/article');
 require('../db');
 
 module.exports.delete = async (event, context) => {
-  console.log(event);
   const _id = (event.pathParameters && event.pathParameters.hasOwnProperty('_id'))
     ? sanitize(event.pathParameters._id)
     : false;

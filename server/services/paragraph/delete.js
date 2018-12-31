@@ -12,6 +12,7 @@ module.exports.delete = async (event, context) => {
     : false;
   if (_id) {
     paragraph = await Paragraph.findOneAndDelete({ _id });
+    message += ' paragraph successfully deleted';
   } else {
     statusCode = 400;
     message = 'paragraph delete endpoint called, please specify an id';

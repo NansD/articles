@@ -15,7 +15,7 @@ require('../db');
 
 module.exports.read = async (event, context) => {
   let statusCode = 200;
-  const message = 'article read endpoint called';
+  let message = 'article read endpoint called';
   const _id = (event.pathParameters && event.pathParameters.hasOwnProperty('_id'))
     ? sanitize(event.pathParameters._id)
     : false;
@@ -24,11 +24,9 @@ module.exports.read = async (event, context) => {
   let article;
   let articles;
   if (_id) {
-    console.log('find only one article');
     article = await Article.findOne({ _id });
     if (article) {
       const paragraphs = await Paragraph.find({ articleId: article._id });
-      console.log(article);
       article = {
         _id: article._id,
         title: article.title,
@@ -36,6 +34,7 @@ module.exports.read = async (event, context) => {
       };
     } else {
       statusCode = 404;
+      message = 'article not found';
     }
   } else {
     articles = await Article.find();
@@ -47,7 +46,6 @@ module.exports.read = async (event, context) => {
           title: articles[i].title,
           paragraphs: await Paragraph.find({ articleId: articles[i]._id }),
         });
-        console.log(articles[i]);
       }
       articles = articlesWithParagraphs;
     }

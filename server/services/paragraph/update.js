@@ -6,12 +6,11 @@ require('../db');
 module.exports.update = async (event, context) => {
   let statusCode = 200;
   let paragraph;
-  const message = 'paragraph create endpoint called, paragraph successfully created';
+  let message = 'paragraph update endpoint called, paragraph successfully updated';
   const formData = sanitize(queryString.parse(event.body));
   const _id = (event.pathParameters && event.pathParameters.hasOwnProperty('_id'))
     ? sanitize(event.pathParameters._id)
     : false;
-  console.log(formData._id);
   if (_id && _id === formData._id) {
     // Lorsqu'on update le paragraphe, il a un nouvel ordre
     // Il peut s'agir d'un numéro d'ordre qui est déjà utilisé
@@ -20,7 +19,6 @@ module.exports.update = async (event, context) => {
     for (let i = 0; i < articleParagraphs.length; i++) {
       const p = articleParagraphs[i];
       if (p._id != _id && formData.order && p.order >= formData.order) {
-        console.log('update de', p);
         p.order += 1;
         await Paragraph.findOneAndUpdate({ _id: p._id }, p);
       }
@@ -28,10 +26,12 @@ module.exports.update = async (event, context) => {
     paragraph = await Paragraph.findOneAndUpdate({ _id }, formData, { new: true });
   } else {
     statusCode = 400;
+    message = 'Bad request';
   }
 
   if (paragraph == null) {
     statusCode = 404;
+    message = 'Paragraph not found';
   }
 
   return {

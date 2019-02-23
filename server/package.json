@@ -6,12 +6,12 @@
     "base-64": "^0.1.0",
     "mongo-sanitize": "^1.0.0",
     "mongoose-unique-validator": "^2.0.1",
-    "serverless": "^1.32.0"
+    "serverless": "^1.32.0",
+    "mongoose": "^5.4.0",
+    "qs": "^6.5.2"
   },
   "devDependencies": {
     "cryptiles": "^4.1.2",
-    "mongoose": "^5.4.0",
-    "qs": "^6.5.2",
     "serverless-offline": "^3.25.11"
   },
   "scripts": {

@@ -28,7 +28,7 @@ class ArticleManager extends Component {
 
     //On mounting: get all the articles
     componentDidMount() {
-        axios.get('http://localhost:3000/article').then(res => {
+        axios.get('/article').then(res => {
             this.setState({
                 results:res.data.articles
             })
@@ -39,7 +39,7 @@ class ArticleManager extends Component {
     addArticle = () => {
         const title = this.state.change.articleName.trim();
         if(title) {
-            axios.post('http://localhost:3000/article',"title="+title).then((res) => {
+            axios.post('/article',"title="+title).then((res) => {
                 this.setState(prevState => ({
                     inputClasses: 'input',
                     inputIsError: false,
@@ -60,8 +60,8 @@ class ArticleManager extends Component {
     //Deletes an article in the db and in the front app
     delArticle = (e) => {
         const id = e.target.id;
-        axios.delete('http://localhost:3000/article/' + id).then(res => {
-            axios.get('http://localhost:3000/article').then(res => {
+        axios.delete('/article/' + id).then(res => {
+            axios.get('/article').then(res => {
                 this.setState({
                     results:res.data.articles
                 })

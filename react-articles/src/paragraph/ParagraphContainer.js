@@ -44,7 +44,7 @@ class ParagraphContainer extends Component {
     //Method displaying the paragraphs of an article
     updateFrontParagraph = (articleId) => {
         const articleIdToQuery = articleId || this.props.articleid
-        axios.get('http://localhost:3000/article/' + articleIdToQuery).then(res => {
+        axios.get('/article/' + articleIdToQuery).then(res => {
             let paragraphs = res.data.article.paragraphs;
 
             paragraphs.sort(function (a, b) {
@@ -69,7 +69,7 @@ class ParagraphContainer extends Component {
     addParagraph = () => {
         const order = this.state.paragraphs.length + 1;
         const content = this.state.change.paragraphContent ? this.state.change.paragraphContent : "Nouveau Paragraphe";
-        axios.post('http://localhost:3000/paragraph',"articleId=" + this.props.articleid + "&order=" + order + "&content=" + content).then(
+        axios.post('/paragraph',"articleId=" + this.props.articleid + "&order=" + order + "&content=" + content).then(
             this.updateFrontParagraph()
         )
     };
@@ -112,7 +112,7 @@ class ParagraphContainer extends Component {
     //Deletes a pargraph in the database and in the state
     delParagraph = (e) => {
         const id = e.target.dataset.id;
-        axios.delete("http://localhost:3000/paragraph/" + id).then(
+        axios.delete("/paragraph/" + id).then(
             this.updateFrontParagraph()
         )
     };
@@ -129,7 +129,7 @@ class ParagraphContainer extends Component {
         if (e.keyCode === 13) {
             const id = e.target.dataset.id;
             let paragraphs = [...this.state.paragraphs];
-            axios.patch("http://localhost:3000/paragraph/" + id,"_id=" + id + "&content=" + paragraphs[e.target.name].content).then(
+            axios.patch("/paragraph/" + id,"_id=" + id + "&content=" + paragraphs[e.target.name].content).then(
                 paragraphs[e.target.name].toEdit = false
             );
             paragraphs[e.target.name].previousContent = paragraphs[e.target.name].content;
@@ -148,12 +148,12 @@ class ParagraphContainer extends Component {
             // let id;
             // this.state.paragraphs.forEach(function (paragraph, index) {
             //     id = paragraph._id;
-            //     axios.patch("http://localhost:3000/paragraph/" + id,"_id=" + id + "&order=" + index);
+            //     axios.patch("/paragraph/" + id,"_id=" + id + "&order=" + index);
             // })
             //
             // but instead we have decided to create a route to allow to update
             // several paragraphs at a time :
-            axios.patch('http://localhost:3000/paragraphs', "paragraphs="+JSON.stringify(this.state.paragraphs));
+            axios.patch('/paragraphs', "paragraphs="+JSON.stringify(this.state.paragraphs));
         });        
         
         
